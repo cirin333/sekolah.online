@@ -1,0 +1,353 @@
+SekolahDigital.html
+html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SekolahDigital - Sistem Presensi & Kegiatan Harian Siswa</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* Custom scroll for sidebar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(59,130,246,0.6);
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+<header class="bg-blue-600 text-white p-4 flex justify-between items-center">
+  <h1 class="text-lg font-bold">SekolahDigital</h1>
+  <nav class="hidden md:flex space-x-4">
+    <button data-page="dashboard" class="nav-btn hover:underline">Dashboard</button>
+    <button data-page="presensi" class="nav-btn hover:underline">Presensi</button>
+    <button data-page="tugas" class="nav-btn hover:underline">Tugas</button>
+    <button data-page="jadwal" class="nav-btn hover:underline">Jadwal Kegiatan</button>
+    <button data-page="riwayat" class="nav-btn hover:underline">Riwayat Kehadiran</button>
+    <button data-page="profil" class="nav-btn hover:underline">Profil</button>
+  </nav>
+  <button id="menu-toggle" class="md:hidden focus:outline-none">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+      viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+</header>
+
+<div class="flex flex-1 overflow-hidden">
+  <!-- Sidebar mobile -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform -translate-x-full md:translate-x-0 transition-transform duration-300 overflow-y-auto z-40">
+    <div class="p-4 border-b font-bold text-blue-600">Menu Navigasi</div>
+    <nav class="flex flex-col space-y-2 p-4">
+      <button data-page="dashboard" class="nav-btn text-left px-2 py-2 rounded hover:bg-blue-100">Dashboard</button>
+      <button data-page="presensi" class="nav-btn text-left px-2 py-2 rounded hover:bg-blue-100">Presensi</button>
+      <button data-page="tugas" class="nav-btn text-left px-2 py-2 rounded hover:bg-blue-100">Tugas</button>
+      <button data-page="jadwal" class="nav-btn text-left px-2 py-2 rounded hover:bg-blue-100">Jadwal Kegiatan</button>
+      <button data-page="riwayat" class="nav-btn text-left px-2 py-2 rounded hover:bg-blue-100">Riwayat Kehadiran</button>
+      <button data-page="profil" class="nav-btn text-left px-2 py-2 rounded hover:bg-blue-100">Profil</button>
+      <button id="logout" class="mt-8 text-left px-2 py-2 rounded hover:bg-red-100 text-red-600 font-semibold">Logout</button>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 overflow-auto p-6 md:ml-64" id="content-area">
+
+    <!-- Dashboard Page -->
+    <section id="dashboard" class="page">
+      <h2 class="text-2xl font-bold mb-4 text-blue-700">Dashboard</h2>
+      <p>Selamat datang di SekolahDigital, platform untuk memudahkan proses presensi dan manajemen kegiatan sekolah.</p>
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="font-semibold mb-2 text-indigo-700">Ringkasan Presensi</h3>
+          <ul class="text-sm space-y-1">
+            <li>Hadir: 18 Hari</li>
+            <li>Terlambat: 2 Hari</li>
+            <li>Izin: 1 Hari</li>
+            <li>Sakit: 0 Hari</li>
+            <li>Alfa: 0 Hari</li>
+          </ul>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="font-semibold mb-2 text-indigo-700">Tugas Aktif</h3>
+          <ul class="text-sm space-y-1">
+            <li>Matematika - Deadline: 25 Okt 2023</li>
+            <li>Bahasa Indonesia - Deadline: 28 Okt 2023</li>
+          </ul>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="font-semibold mb-2 text-indigo-700">Jadwal Hari Ini</h3>
+          <ul class="text-sm space-y-1">
+            <li>08:00 - 09:30: Matematika</li>
+            <li>09:45 - 11:15: Bahasa Indonesia</li>
+            <li>13:00 - 14:30: Sejarah</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Presensi Page -->
+    <section id="presensi" class="page hidden">
+      <h2 class="text-2xl font-bold mb-4 text-blue-700">Presensi Siswa</h2>
+      <div class="bg-white rounded p-6 shadow max-w-lg">
+        <h3 class="text-lg mb-2 font-semibold">Presensi Harian</h3>
+        <div class="flex space-x-3 mb-4">
+          <button class="btn-presensi bg-green-500 hover:bg-green-600 text-white rounded px-4 py-2" data-status="Hadir">Hadir</button>
+          <button class="btn-presensi bg-yellow-400 hover:bg-yellow-500 text-white rounded px-4 py-2" data-status="Terlambat">Terlambat</button>
+          <button class="btn-presensi bg-blue-500 hover:bg-blue-600 text-white rounded px-4 py-2" data-status="Izin">Izin</button>
+          <button class="btn-presensi bg-gray-500 hover:bg-gray-600 text-white rounded px-4 py-2" data-status="Alfa">Alfa</button>
+          <button class="btn-presensi bg-red-600 hover:bg-red-700 text-white rounded px-4 py-2" data-status="Sakit">Sakit</button>
+        </div>
+        <div id="presensi-status" class="text-sm font-medium"></div>
+      </div>
+    </section>
+
+    <!-- Tugas Page -->
+    <section id="tugas" class="page hidden">
+      <h2 class="text-2xl font-bold mb-4 text-blue-700">Daftar Tugas</h2>
+      <div class="bg-white rounded p-4 shadow max-w-3xl">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead>
+            <tr class="bg-blue-100">
+              <th class="border border-gray-300 px-3 py-2 text-left">Judul</th>
+              <th class="border border-gray-300 px-3 py-2 text-left">Deskripsi</th>
+              <th class="border border-gray-300 px-3 py-2">Deadline</th>
+              <th class="border border-gray-300 px-3 py-2">Status</th>
+              <th class="border border-gray-300 px-3 py-2">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tugas-list">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-white rounded p-4 shadow max-w-3xl mt-6">
+        <h3 class="text-lg font-semibold mb-2">Upload Tugas</h3>
+        <form id="upload-tugas-form">
+          <input type="text" id="upload-tugas-judul" placeholder="Judul Tugas" class="border p-2 rounded w-full mb-2" required />
+          <textarea id="upload-tugas-deskripsi" placeholder="Deskripsi Tugas" class="border p-2 rounded w-full mb-2" rows="3" required></textarea>
+          <input type="date" id="upload-tugas-deadline" class="border p-2 rounded w-full mb-2" required />
+          <input type="file" id="upload-tugas-file" class="mb-2" />
+          <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Upload</button>
+        </form>
+        <div id="upload-success" class="text-green-600 mt-2 hidden">Tugas berhasil diupload!</div>
+      </div>
+    </section>
+
+    <!-- Jadwal Kegiatan Page -->
+    <section id="jadwal" class="page hidden">
+      <h2 class="text-2xl font-bold mb-4 text-blue-700">Jadwal Kegiatan</h2>
+      <div class="bg-white rounded p-4 shadow max-w-3xl">
+        <h3 class="font-semibold mb-2">Jadwal Pelajaran Hari Ini</h3>
+        <ul class="list-disc pl-5 mb-6">
+          <li>08:00 - 09:30: Matematika</li>
+          <li>09:45 - 11:15: Bahasa Indonesia</li>
+          <li>13:00 - 14:30: Sejarah</li>
+        </ul>
+        <h3 class="font-semibold mb-2">Kegiatan Sekolah dan Ekskul</h3>
+        <ul class="list-disc pl-5">
+          <li>Rapat Guru: 27 Oktober 2023, 15:00</li>
+          <li>Persiapan Olimpiade Sains: 28 Oktober 2023</li>
+          <li>Ekstrakurikuler Basket: Setiap Senin dan Jumat</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Riwayat Kehadiran Page -->
+    <section id="riwayat" class="page hidden">
+      <h2 class="text-2xl font-bold mb-4 text-blue-700">Riwayat Kehadiran</h2>
+      <canvas id="kehadiran-chart" class="bg-white rounded p-4 shadow max-w-3xl"></canvas>
+    </section>
+
+    <!-- Profil Page -->
+    <section id="profil" class="page hidden max-w-3xl">
+      <h2 class="text-2xl font-bold mb-4 text-blue-700">Profil Pengguna</h2>
+      <div class="bg-white rounded p-6 shadow">
+        <p><strong>Nama :</strong> Rizki Pratama</p>
+        <p><strong>Role :</strong> Siswa</p>
+        <p><strong>Email :</strong> rizki@example.com</p>
+        <p><strong>Kelas :</strong> 10 IPA 1</p>
+        <!-- Profil lain bisa ditambahkan di sini -->
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Basic SPA navigation
+  const navButtons = document.querySelectorAll('.nav-btn');
+  const pages = document.querySelectorAll('.page');
+  const sidebar = document.getElementById('sidebar');
+  const menuToggle = document.getElementById('menu-toggle');
+
+  function showPage(pageId) {
+    pages.forEach(p => {
+      if (p.id === pageId) {
+        p.classList.remove('hidden');
+      } else {
+        p.classList.add('hidden');
+      }
+    });
+    // Close sidebar on mobile after navigation
+    if (window.innerWidth < 768) {
+      sidebar.classList.add('-translate-x-full');
+    }
+  }
+
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const page = btn.dataset.page;
+      showPage(page);
+    });
+  });
+
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('-translate-x-full');
+  });
+
+  // Default show dashboard page on load
+  showPage('dashboard');
+
+  // Presensi logic
+  const presensiButtons = document.querySelectorAll('.btn-presensi');
+  const presensiStatus = document.getElementById('presensi-status');
+
+  presensiButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const status = btn.dataset.status;
+      presensiStatus.textContent = `Presensi berhasil dicatat dengan status: ${status}`;
+      presensiStatus.classList.remove('text-red-600','text-green-600','text-yellow-600','text-blue-600','text-gray-600');
+      switch(status){
+        case 'Hadir': presensiStatus.classList.add('text-green-600'); break;
+        case 'Terlambat': presensiStatus.classList.add('text-yellow-600'); break;
+        case 'Izin': presensiStatus.classList.add('text-blue-600'); break;
+        case 'Alfa': presensiStatus.classList.add('text-gray-600'); break;
+        case 'Sakit': presensiStatus.classList.add('text-red-600'); break;
+      }
+    });
+  });
+
+  // Tugas dummy data
+  let tugasData = [
+    {judul:'Matematika', deskripsi:'Kerjakan soal 1-10 halaman 25', deadline:'2023-10-25', status:'Belum dikumpulkan'},
+    {judul:'Bahasa Indonesia', deskripsi:'Tulis essay tentang pahlawan nasional', deadline:'2023-10-28', status:'Sudah dikumpulkan'}
+  ];
+
+  function renderTugas() {
+    const tbody = document.getElementById('tugas-list');
+    tbody.innerHTML = '';
+    tugasData.forEach((tugas, i) => {
+      const tr = document.createElement('tr');
+      tr.classList.add('border-t','border-gray-300');
+      tr.innerHTML = `
+        <td class="border border-gray-300 px-3 py-1">${tugas.judul}</td>
+        <td class="border border-gray-300 px-3 py-1">${tugas.deskripsi}</td>
+        <td class="border border-gray-300 px-3 py-1 text-center">${tugas.deadline}</td>
+        <td class="border border-gray-300 px-3 py-1 text-center">${tugas.status}</td>
+        <td class="border border-gray-300 px-3 py-1 text-center">
+          ${tugas.status === 'Belum dikumpulkan' ? `<button data-index="${i}" class="btn-kumpulkan bg-green-500 text-white px-2 py-1 rounded text-sm hover:bg-green-600">Kumpulkan</button>` : '✔'}
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+    document.querySelectorAll('.btn-kumpulkan').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const idx = e.target.dataset.index;
+        tugasData[idx].status = 'Sudah dikumpulkan';
+        renderTugas();
+        alert('Tugas telah dikumpulkan!');
+      });
+    });
+  }
+
+  renderTugas();
+
+  // Tugas upload form
+  const uploadForm = document.getElementById('upload-tugas-form');
+  const uploadSuccess = document.getElementById('upload-success');
+
+  uploadForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const judul = document.getElementById('upload-tugas-judul').value.trim();
+    const deskripsi = document.getElementById('upload-tugas-deskripsi').value.trim();
+    const deadline = document.getElementById('upload-tugas-deadline').value;
+    if (judul && deskripsi && deadline) {
+      tugasData.push({judul, deskripsi, deadline, status: 'Belum dikumpulkan'});
+      renderTugas();
+      uploadForm.reset();
+      uploadSuccess.classList.remove('hidden');
+      setTimeout(() => uploadSuccess.classList.add('hidden'), 3000);
+    }
+  });
+
+  // Kehadiran chart (dummy data)
+  const ctx = document.getElementById('kehadiran-chart').getContext('2d');
+
+  const kehadiranChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
+      datasets: [
+        {
+          label: 'Hadir',
+          data: [5, 4, 5, 5],
+          backgroundColor: 'rgba(34,197,94,0.7)'
+        },
+        {
+          label: 'Terlambat',
+          data: [0, 1, 0, 1],
+          backgroundColor: 'rgba(250,204,21,0.7)'
+        },
+        {
+          label: 'Izin',
+          data: [1, 0, 1, 0],
+          backgroundColor: 'rgba(59,130,246,0.7)'
+        },
+        {
+          label: 'Sakit',
+          data: [0, 0, 0, 0],
+          backgroundColor: 'rgba(239,68,68,0.7)'
+        },
+        {
+          label: 'Alfa',
+          data: [0, 0, 0, 0],
+          backgroundColor: 'rgba(107,114,128,0.7)'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        title: {
+          display: true,
+          text: 'Statistik Kehadiran Bulanan'
+        }
+      },
+      scales: {
+        y: { beginAtZero: true, stepSize: 1 }
+      }
+    }
+  });
+
+  // Logout button
+  document.getElementById('logout').addEventListener('click', () => {
+    alert('Anda telah logout!');
+    // Redirect ke halaman login atau lakukan proses logout
+  });
+</script>
+
+</body>
+</html>
+
